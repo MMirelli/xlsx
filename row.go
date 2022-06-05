@@ -1,4 +1,7 @@
 package xlsx
+import (
+	"regexp"
+)
 
 type Row struct {
 	Cells        []*Cell
@@ -24,4 +27,17 @@ func (r *Row) AddCell() *Cell {
 	r.Cells = append(r.Cells, cell)
 	r.Sheet.maybeAddCol(len(r.Cells))
 	return cell
+}
+
+// Contains checks whether a given regex is contained in a xlsx.Cell of the given
+// xlsx.Row. It returns its index if found, otherwise -1.
+func (r *Row) Contains(regex string) bool{
+	var rst bool = false
+	for _, cell := range r.Cells{
+		if found, _ := regexp.Match(regex, []byte(cell.Value)); found{
+			rst = true
+			break
+		}
+	}
+	return rst
 }
